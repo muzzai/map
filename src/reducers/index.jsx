@@ -1,6 +1,6 @@
 //@ts-ignore
 
-const initialState = {};
+const initialState = {  };
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'GET_OFFICES': return { ...state, offices: action.payload }
