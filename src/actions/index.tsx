@@ -1,6 +1,6 @@
 // @ts-ignore
 export default () => (dispatch) => {
-  fetch("http://localhost:3001/offices")
+  fetch("http://localhost:3001/Offices")
     .then((res) => res.json())
     .then((data) => dispatch(getOfficesSuccess(data)))
 }
