@@ -1,9 +1,7 @@
 import React from 'react'
-// @ts-ignore
-import { parse } from 'svg-parser';
-import { Popover } from 'antd';
 
-const getValidJSXStyles = (style:string) => {
+export const getValidJKeyValPair = (style:string) => {
+  
   const [ dashedKey, value ] = style.split(":");
   const [ firstWord, ...restWords ] = dashedKey.split("-");
   const camelCaseKey = restWords.length
@@ -12,20 +10,24 @@ const getValidJSXStyles = (style:string) => {
   return [ camelCaseKey, value ]
 }
 
-const convertHASTtoJSX = (hast: any) :any => {
-  const { children, tagName, properties } = hast;
-  const { style } = properties;
+export const getValidStyles = (style: string) => {
+  return style.split(";")
+    .filter((style:any) => style !== "")
+    .reduce((acc :any, style:any) => {
+      const [ key, val ] = getValidJKeyValPair(style);
+      return {...acc, [key]: val};
+    }, {})
+}
+export const convertJSONtoJSX = ({ children, name, attributes }: any) :any => {
+  const { style } = attributes;
   const newStyle = style
-    ? style.split(";").reduce((acc :any, style:any) => {
-          const [ key, val ] = getValidJSXStyles(style);
-        return {...acc, [key]: val};
-      }, {})
+    ? getValidStyles(style)
     : ""
   if (children.length) {
-    return React.createElement(tagName, { ...properties, style:{...newStyle}}, ...children.map((child: any) => convertHASTtoJSX(child)));
+    return React.createElement(name || 'g', { ...attributes, style:{...newStyle}}, ...children.map((child: any) => convertJSONtoJSX(child)));
   }
 
-  return React.createElement(tagName, { ...properties, style:{...newStyle}}, children);
+  return React.createElement(name || 'g', { ...attributes, style:{...newStyle}}, children);
 }
 
 export const myMap = (svg: any, func: Function) :any => {
@@ -40,6 +42,4 @@ export const myMap = (svg: any, func: Function) :any => {
 
   return func(svg)
 }
-
-export const getJSXElementFromSvg = (svgString:string) => convertHASTtoJSX(parse(svgString).children[0])
 

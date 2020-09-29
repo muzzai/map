@@ -1,13 +1,26 @@
 import React from 'react';
+// @ts-ignore
+import { connect } from 'react-redux';
 import { Card, Avatar } from 'antd';
+const faker = require('faker');
 
-const UserCard = (props:any) => {
-  return (
-    <div>
-      <p>Contentt</p>
-      <p>{props.id}</p>
-    </div>
-  )
+const { Meta } = Card
+
+
+const UserCard = ({ people, id, unselectId }:any) => {
+
+  const findPerson = () => {
+    const person = people.find((person: any) => person.workplace === id);
+    return <p>{person ? person.name : 'empty' }</p>;
+  }
+  
+  return <Meta avatar={<Avatar src={faker.image.avatar()}/>} title={findPerson()} />
+  
 }
 
-export default UserCard;
+const mapStateToProps = (state: any) => {
+  const { people } = state;
+  return { people }
+}
+
+export default connect(mapStateToProps, {})(UserCard)
