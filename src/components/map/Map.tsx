@@ -1,8 +1,9 @@
 import React from "react";
 // @ts-ignore
 import { connect } from "react-redux";
-import { myMap, convertJSONtoJSX, getValidStyles } from "../../utils";
+import { myMap, convertJSONtoJSX } from "../../utils";
 import PopCard from "../PopCard";
+import './Map.css'
 import img from './unnamed.jpg'
 const faker = require("faker");
 const regExpCheck = /^\D\d$/;
@@ -27,26 +28,9 @@ const Map = ({ offices, people }: any) => {
     }
     return elem;
   };
-  const { children } = offices;
-  const { style, viewBox } = offices.attributes;
-
-  const newStyle = getValidStyles(style);
-  const map = (
-    <svg style={{ ...newStyle }} viewBox={viewBox}>
-      {children.map((child: any) => convertJSONtoJSX(child))}
-    </svg>
-  );
   return (
-    <div
-      style={{
-        display: "block",
-        width: "70%",
-        overflow: "auto",
-        margin: "10px auto",
-        position: "relative",
-      }}
-    >
-      {myMap(map, addPopover)}
+    <div className="map" >
+      {myMap(convertJSONtoJSX(offices), addPopover)}
     </div>
   );
 };
