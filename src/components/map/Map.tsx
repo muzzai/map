@@ -3,38 +3,47 @@ import React from "react";
 import { connect } from "react-redux";
 import { myMap, convertJSONtoJSX, getValidStyles } from "../../utils";
 import PopCard from "../PopCard";
-
+import { UserOutlined } from "@ant-design/icons";
+const faker = require("faker");
 const regExpCheck = /^\D\d$/;
 
-const windowWidth = document.body.clientWidth;
-const windowHeight = document.body.clientHeight;
-
-const Map = ({ offices }: any) => {
-  const addPopover = (elem: any) => {
-    const { id } = elem.props;
-    return regExpCheck.test(id) ? <PopCard id={id}>{elem}</PopCard> : elem;
-  };
-
-  if (!offices) {
+const Map = ({ offices, people }: any) => {
+  if (!offices || !people) {
     return <h1>Loading...</h1>;
   }
+  const findPerson = (id: string) =>
+    people.find((person: any) => person.workplace === id);
+  const addPopover = (elem: any) => {
+    const { id } = elem.props;
+    if (regExpCheck.test(id)) {
+      const person = !people.includes(id)
+        ? { ...findPerson(id), photo: faker.image.avatar() }
+        : { name: "empty", workplace: id, photo: UserOutlined };
+      console.log({ person });
+      return (
+        <PopCard key={id} id={id} person={person}>
+          {elem}
+        </PopCard>
+      );
+    }
+    return elem;
+  };
   const { children } = offices;
-  const { style, viewBox, x, y } = offices.attributes;
+  const { style, viewBox } = offices.attributes;
 
   const newStyle = getValidStyles(style);
   const map = (
-    <svg style={{ ...newStyle }} viewBox={viewBox} x={x} y={y}>
+    <svg style={{ ...newStyle }} viewBox={viewBox}>
       {children.map((child: any) => convertJSONtoJSX(child))}
     </svg>
   );
   return (
     <div
-      className={"scrollable-container"}
       style={{
         display: "block",
-        width: "1000px",
+        width: "70%",
         overflow: "auto",
-        margin: "0 auto",
+        margin: "10px auto",
         position: "relative",
       }}
     >
@@ -43,6 +52,6 @@ const Map = ({ offices }: any) => {
   );
 };
 
-const mapStateToProps = ({ offices, visible }: any) => ({ offices, visible });
+const mapStateToProps = ({ offices, people }: any) => ({ offices, people });
 
 export default connect(mapStateToProps, {})(Map);

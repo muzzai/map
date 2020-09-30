@@ -1,41 +1,47 @@
-import React, { useState } from 'react';
+import React from "react";
 // @ts-ignore
-import { connect } from 'react-redux';
-import { Popover } from 'antd';
-import UserCard from './UserCard'
-import { unselectId } from '../actions'
+import { connect } from "react-redux";
+import { Popover } from "antd";
+import UserCard from "./UserCard";
+import { unselectId } from "../actions";
+import { DesktopOutlined } from "@ant-design/icons";
 
-const PopCard = ({id, visiblePerson, children, unselectId }: any) => {
-
+const PopCard = ({ person, visiblePerson, children, unselectId }: any) => {
   const handleSelect = (visible: boolean) => {
     if (!visible) {
-      unselectId()
+      unselectId();
     }
-  }
+  };
+
+  console.log("!!!!!");
+  console.log({ person });
 
   return (
     <Popover
-    id={id} 
-    placement={"top"} 
-    title={id} 
-    visible={id === visiblePerson} 
-    content={<UserCard id={id}/>}
-    trigger="click"
-    onVisibleChange={handleSelect}>
-      <Popover 
-        id={id} 
-        placement={"top"} 
-        title={id} 
-        content={<UserCard id={id}/>}
+      placement={"top"}
+      title={person.workplace}
+      visible={person.workplace === visiblePerson}
+      content={<UserCard person={person} />}
+      trigger="click"
+      onVisibleChange={handleSelect}
+    >
+      <Popover
+        placement={"top"}
+        title={
+          <div>
+            <span>Workplace</span>
+            <span style={{ float: "right" }}>{person.workplace}</span>
+          </div>
+        }
+        content={<UserCard person={person} />}
         trigger="hover"
-      >{children}</Popover>
+      >
+        {children}
+      </Popover>
     </Popover>
-  )
-}
+  );
+};
 
-const mapStateToProps = ({visiblePerson}: any) => ({visiblePerson});
+const mapStateToProps = ({ visiblePerson }: any) => ({ visiblePerson });
 
 export default connect(mapStateToProps, { unselectId })(PopCard);
-
-
-
