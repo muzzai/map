@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Popover } from "antd";
 import UserCard from "./UserCard";
 import { unselectId } from "../actions";
-import { DesktopOutlined } from "@ant-design/icons";
 
 const PopCard = ({ person, visiblePerson, children, unselectId }: any) => {
   const handleSelect = (visible: boolean) => {
@@ -13,8 +12,6 @@ const PopCard = ({ person, visiblePerson, children, unselectId }: any) => {
     }
   };
 
-  console.log("!!!!!");
-  console.log({ person });
 
   return (
     <Popover
