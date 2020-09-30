@@ -16,7 +16,7 @@ const Map = ({ offices, people }: any) => {
   const addPopover = (elem: any) => {
     const { id } = elem.props;
     if (regExpCheck.test(id)) {
-      const person = !people.includes(id)
+      const person = people.find((person: any) => person.workplace === id)
         ? { ...findPerson(id), photo: faker.image.avatar() }
         : { name: "empty", workplace: id, photo: UserOutlined };
       console.log({ person });
