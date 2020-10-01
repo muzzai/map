@@ -1,3 +1,5 @@
+import { GET_OFFICES, GET_PEOPLE, SELECT_ID, UNSELECT } from "./action-types";
+
 // @ts-ignore
 export const getOffice = (id: string) => (dispatch) => {
   fetch(`http://localhost:3001/offices/${id}`)
@@ -6,7 +8,7 @@ export const getOffice = (id: string) => (dispatch) => {
 };
 
 const getOfficesSuccess = (offices: any) => ({
-  type: "GET_OFFICES",
+  type: GET_OFFICES,
   payload: offices.svg,
 });
 // @ts-ignore
@@ -17,15 +19,15 @@ export const getPeople = () => (dispatch) => {
 };
 
 const getPeopleSuccess = (people: any) => ({
-  type: "GET_PEOPLE",
+  type: GET_PEOPLE,
   payload: people,
 });
 // @ts-ignore
 export const selectId = (id: string) => (dispatch) => {
   dispatch({
-    type: "SELECT_ID",
+    type: SELECT_ID,
     payload: id,
   });
 };
 // @ts-ignore
-export const unselectId = () => (dispatch) => dispatch({ type: "UNSELECT" });
+export const unselectId = () => (dispatch) => dispatch({ type: UNSELECT });
